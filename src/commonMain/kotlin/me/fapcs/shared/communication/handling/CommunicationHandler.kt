@@ -3,10 +3,23 @@ package me.fapcs.shared.communication.handling
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import me.fapcs.shared.communication.IPacket
-import me.fapcs.shared.communication.RawPacket
 import me.fapcs.shared.communication.UnknownPacket
 import me.fapcs.shared.expect.CommunicationProvider
 import me.fapcs.shared.log.Logger
+import me.fapcs.shared.module.brightness.packet.BrightnessChangePacket
+import me.fapcs.shared.module.brightness.packet.BrightnessRequestPacket
+import me.fapcs.shared.module.camouflage.packet.SetDarkenInsidePacket
+import me.fapcs.shared.module.camouflage.packet.SetDarkenOutsidePacket
+import me.fapcs.shared.module.camouflage.packet.SetIRLightPacket
+import me.fapcs.shared.module.light.packet.SendLightConfigurationPacket
+import me.fapcs.shared.module.matrix.big.packet.DisableBigMatrixPacket
+import me.fapcs.shared.module.matrix.big.packet.UpdateBigMatrixPacket
+import me.fapcs.shared.module.matrix.small.packet.DisableSmallMatrixSidePacket
+import me.fapcs.shared.module.matrix.small.packet.UpdateSmallMatrixPacket
+import me.fapcs.shared.module.siren.packet.SetMicrophoneStatePacket
+import me.fapcs.shared.module.siren.packet.SetSirenPacket
+import me.fapcs.shared.module.stripe.packet.SetLedPacket
+import me.fapcs.shared.module.stripe.packet.SetLedsPacket
 import me.fapcs.shared.util.json.JsonDocument
 import me.fapcs.shared.util.unit
 import kotlin.reflect.KClass
@@ -14,7 +27,30 @@ import kotlin.reflect.cast
 
 internal class CommunicationHandler : ICommunicationHandler {
 
-    private val packets = mutableListOf<PacketHolder<*>>()
+    private val packets = mutableListOf<PacketHolder<*>>(
+        PacketHolder(UnknownPacket::class, UnknownPacket.serializer()),
+
+        PacketHolder(BrightnessChangePacket::class, BrightnessChangePacket.serializer()),
+        PacketHolder(BrightnessRequestPacket::class, BrightnessRequestPacket.serializer()),
+
+        PacketHolder(SetLedPacket::class, SetLedPacket.serializer()),
+        PacketHolder(SetLedsPacket::class, SetLedsPacket.serializer()),
+
+        PacketHolder(SendLightConfigurationPacket::class, SendLightConfigurationPacket.serializer()),
+
+        PacketHolder(SetDarkenInsidePacket::class, SetDarkenInsidePacket.serializer()),
+        PacketHolder(SetDarkenOutsidePacket::class, SetDarkenOutsidePacket.serializer()),
+        PacketHolder(SetIRLightPacket::class, SetIRLightPacket.serializer()),
+
+        PacketHolder(SetMicrophoneStatePacket::class, SetMicrophoneStatePacket.serializer()),
+        PacketHolder(SetSirenPacket::class, SetSirenPacket.serializer()),
+
+        PacketHolder(DisableSmallMatrixSidePacket::class, DisableSmallMatrixSidePacket.serializer()),
+        PacketHolder(UpdateSmallMatrixPacket::class, UpdateSmallMatrixPacket.serializer()),
+
+        PacketHolder(DisableBigMatrixPacket::class, DisableBigMatrixPacket.serializer()),
+        PacketHolder(UpdateBigMatrixPacket::class, UpdateBigMatrixPacket.serializer()),
+    )
     private val listeners = mutableListOf<(IPacket) -> Unit>()
 
     init {
@@ -46,12 +82,11 @@ internal class CommunicationHandler : ICommunicationHandler {
             Logger.debug("Data: $data")
 
             Logger.debug("Getting packet instance...")
-            val packetHolder = if (packet == "raw") null else packets.firstOrNull { it.packet.simpleName == packet }
+            val packetHolder = packets.firstOrNull { it.packet.simpleName == packet }
             Logger.debug("Packet instance: ${packetHolder?.packet?.simpleName ?: "unknown"}")
 
             val packetInstance =
-                if (packet == "raw") RawPacket(JsonDocument(data))
-                else if (packetHolder == null) UnknownPacket(JsonDocument(data))
+                if (packetHolder == null) UnknownPacket(JsonDocument(data))
                 else Json.decodeFromString(packetHolder.serializer, data)
 
             Logger.debug("Invoking listeners...")
@@ -88,23 +123,6 @@ internal class CommunicationHandler : ICommunicationHandler {
         val document = JsonDocument()
             .set("packet", packet::class.simpleName ?: "unknown")
             .set("data", packetHolder.encode(packet))
-        Logger.debug("Document: $document")
-
-        Logger.debug("Sending packet...")
-        CommunicationProvider.send(document.toString())
-    }
-
-    override fun sendRaw(data: JsonDocument) {
-        Logger.debug("Sending raw packet: $data")
-        if (!CommunicationProvider.isInitialized)  {
-            Logger.fatal("CommunicationProvider is not initialized!")
-            throw IllegalStateException("CommunicationProvider is not initialized!")
-        }
-
-        Logger.debug("Creating document...")
-        val document = JsonDocument()
-            .set("packet", "raw")
-            .set("data", data.toString())
         Logger.debug("Document: $document")
 
         Logger.debug("Sending packet...")

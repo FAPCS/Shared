@@ -2,10 +2,11 @@ package me.fapcs.shared.expect
 
 import me.fapcs.shared.log.LogLevel
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 actual object LogProvider {
 
-    val logger = LogManager.getLogger("FAPCS")
+    private val logger: Logger = LogManager.getLogger("FAPCS")
 
     actual fun log(level: LogLevel, message: String) = when (level) {
         LogLevel.DEBUG -> logger.debug(message)

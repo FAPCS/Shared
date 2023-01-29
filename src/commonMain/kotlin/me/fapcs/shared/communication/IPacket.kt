@@ -7,6 +7,3 @@ interface IPacket
 
 @Serializable
 data class UnknownPacket(val data: JsonDocument) : IPacket
-
-@Serializable
-data class RawPacket(val data: JsonDocument) : IPacket

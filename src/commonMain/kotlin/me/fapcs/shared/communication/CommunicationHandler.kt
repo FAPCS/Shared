@@ -2,7 +2,6 @@ package me.fapcs.shared.communication
 
 import kotlinx.serialization.KSerializer
 import me.fapcs.shared.communication.handling.ICommunicationHandler
-import me.fapcs.shared.util.json.JsonDocument
 import kotlin.reflect.KClass
 
 @Suppress("unused")
@@ -21,8 +20,6 @@ object CommunicationHandler {
     inline fun <reified T : IPacket> register(serializer: KSerializer<T>) = register(T::class, serializer)
 
     fun send(packet: IPacket) = getHandler().send(packet)
-
-    fun sendRaw(data: JsonDocument) = getHandler().sendRaw(data)
 
     fun <T : IPacket> receive(packet: KClass<T>, callback: (T) -> Unit) = getHandler().receiveAll(packet, callback)
 
