@@ -1,6 +1,9 @@
 @file:Suppress("unused")
+@file:JvmName("TimeImplKt")
 
 package me.fapcs.shared.util
+
+import kotlin.jvm.JvmName
 
 expect fun clearTimeout(id: Int)
 expect fun setTimeout(function: Time.() -> Unit, delay: Long)
