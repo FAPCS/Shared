@@ -7,25 +7,19 @@ external fun clearJsTimeout(handle: Int)
 external fun setJsInterval(function: () -> Unit, delay: Long): Int
 external fun clearJsInterval(id: Int)
 
-fun setTimeout(function: Time.() -> Unit, delay: Long) {
+actual fun clearTimeout(id: Int) = clearJsTimeout(id)
+
+actual fun setTimeout(function: Time.() -> Unit, delay: Long) {
     val time = TimeImpl(true)
     time.setId(setJsTimeout({ time.function() }, delay))
 }
 
-fun setTimeout(delay: Long, function: Time.() -> Unit) = setTimeout(function, delay)
+actual fun clearInterval(id: Int) = clearJsInterval(id)
 
-fun setInterval(function: Time.() -> Unit, delay: Long, executeNow: Boolean = false) {
+actual fun setInterval(function: Time.() -> Unit, delay: Long, executeNow: Boolean) {
     val time = TimeImpl(false)
     time.setId(setJsInterval({ time.function() }, delay))
     if (executeNow) time.function()
-}
-
-fun setInterval(delay: Long, executeNow: Boolean = false, function: Time.() -> Unit) =
-    setInterval(function, delay, executeNow)
-
-interface Time {
-    val id: Int
-    fun clear()
 }
 
 internal class TimeImpl(private val timeout: Boolean) : Time {
