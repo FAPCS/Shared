@@ -105,9 +105,9 @@ class JsonDocument(private var jsonObject: JsonObject) {
 
     fun set(key: String, value: String) = set(key, JsonPrimitive(value))
 
-    fun set(key: String, value: JsonArray): JsonDocument = set(key, value)
+    fun set(key: String, value: JsonArray): JsonDocument = set<JsonArray>(key, value)
 
-    fun set(key: String, value: JsonObject): JsonDocument = set(key, value)
+    fun set(key: String, value: JsonObject): JsonDocument = set<JsonObject>(key, value)
 
     fun set(key: String, value: JsonDocument) = set(key, value.jsonObject)
 

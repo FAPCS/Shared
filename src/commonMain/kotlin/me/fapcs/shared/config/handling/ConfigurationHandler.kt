@@ -64,7 +64,7 @@ internal class ConfigurationHandler : IConfigurationHandler {
 
         for (i in 0 until split.size - 1) {
             val currentKey = split[i]
-            document = if (currentKey in document) {
+            document = if (currentKey !in document) {
                 if (create) document.set(currentKey, JsonDocument())
                 else return
             } else document.getJsonDocument(currentKey)!!
