@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.fapcs"
-version = "1.1"
+version = "1.2"
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ kotlin {
         }
     }
 
-    js(BOTH) {
+    js(IR) {
         browser {
             commonWebpackConfig {
                 cssSupport {
@@ -36,8 +36,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
             }
         }
         val commonTest by getting {
@@ -48,7 +48,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation("org.apache.logging.log4j:log4j-api:2.14.1")
+                implementation("org.apache.logging.log4j:log4j-api:2.19.0")
                 implementation("org.apache.logging.log4j:log4j-core:2.19.0")
             }
         }
