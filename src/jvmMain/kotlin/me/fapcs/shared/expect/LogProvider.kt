@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger
 
 actual object LogProvider {
 
-    private val logger: Logger = LogManager.getLogger("FAPCS")
+    private val logger: Logger = LogManager.getRootLogger()
 
     actual fun log(level: LogLevel, message: String) = when (level) {
         LogLevel.DEBUG -> logger.debug(message)

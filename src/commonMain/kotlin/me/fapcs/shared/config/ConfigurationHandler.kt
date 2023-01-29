@@ -13,7 +13,9 @@ object ConfigurationHandler {
         return handler!!
     }
 
-    fun create(key: String, value: Any) = getHandler().create(key, value)
+    fun <T : Any> create(klass: KClass<T>, key: String, value: T) = getHandler().create(klass, key, value)
+
+    inline fun <reified T : Any> create(key: String, value: T) = create(T::class, key, value)
 
     fun <T : Any> get(klass: KClass<T>, key: String): T? = getHandler().get(klass, key)
 
