@@ -18,6 +18,7 @@ actual object ConfigProvider {
     }
 
     actual fun set(config: JsonDocument) {
+        @Suppress("SpellCheckingInspection")
         document.cookie = "config=$config, expires=Fri, 31 Dec 9999 23:59:59 GMT, path=/, samesite=strict, secure"
     }
 
