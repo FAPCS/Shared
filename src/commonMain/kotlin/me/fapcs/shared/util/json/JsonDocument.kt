@@ -6,6 +6,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 import me.fapcs.shared.util.extention.toJsonObject
+import kotlin.reflect.KClass
 
 @Serializable(with = JsonDocument.JsonSerializer::class)
 @Suppress("MemberVisibilityCanBePrivate", "unused")
@@ -111,6 +112,10 @@ class JsonDocument(private var jsonObject: JsonObject) {
     fun set(key: String, value: JsonDocument) = set(key, value.jsonObject)
 
     inline fun <reified T : Any> set(key: String, value: T) = set(key, Json.encodeToJsonElement(value))
+
+    @OptIn(InternalSerializationApi::class)
+    fun <T : Any> set(klass: KClass<T>, key: String, value: T) =
+        set(key, Json.encodeToJsonElement(klass.serializer(), value))
 
     fun toJsonObject() = jsonObject
 

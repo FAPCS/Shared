@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 interface IConfigurationHandler {
 
-    fun create(key: String, value: Any)
+    fun <T : Any> create(klass: KClass<T>, key: String, value: T)
 
     fun <T : Any> get(klass: KClass<T>, key: String): T?
 
