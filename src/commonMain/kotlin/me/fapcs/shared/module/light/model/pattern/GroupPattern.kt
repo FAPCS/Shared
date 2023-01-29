@@ -1,0 +1,21 @@
+package me.fapcs.shared.module.light.model.pattern
+
+@Suppress("unused")
+enum class GroupPattern {
+
+    STATIC,
+
+    SPIN_SLOW,
+    SPIN_FAST,
+
+    SWITCH_SLOW,
+    SWITCH_FAST,
+
+    PULSE_SLOW,
+    PULSE_FAST,
+
+    RUNNING_LEFT,
+    RUNNING_RIGHT,
+    RUNNING_BOTH
+
+}
