@@ -5,4 +5,4 @@ import me.fapcs.shared.communication.IPacket
 
 @Serializable
 @Suppress("unused")
-class BrightnessRequestPacket : IPacket
+object BrightnessRequestPacket : IPacket

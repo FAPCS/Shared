@@ -2,6 +2,7 @@ package me.fapcs.shared.communication.handling
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import me.fapcs.shared.communication.CommunicationHandler
 import me.fapcs.shared.communication.IPacket
 import me.fapcs.shared.communication.UnknownPacket
 import me.fapcs.shared.expect.CommunicationProvider
@@ -11,6 +12,7 @@ import me.fapcs.shared.module.brightness.packet.BrightnessRequestPacket
 import me.fapcs.shared.module.camouflage.packet.SetDarkenInsidePacket
 import me.fapcs.shared.module.camouflage.packet.SetDarkenOutsidePacket
 import me.fapcs.shared.module.camouflage.packet.SetIRLightPacket
+import me.fapcs.shared.module.general.packet.PingPacket
 import me.fapcs.shared.module.light.packet.SendLightConfigurationPacket
 import me.fapcs.shared.module.matrix.big.packet.DisableBigMatrixPacket
 import me.fapcs.shared.module.matrix.big.packet.UpdateBigMatrixPacket
@@ -21,6 +23,7 @@ import me.fapcs.shared.module.siren.packet.SetSirenPacket
 import me.fapcs.shared.module.stripe.packet.SetLedPacket
 import me.fapcs.shared.module.stripe.packet.SetLedsPacket
 import me.fapcs.shared.util.json.JsonDocument
+import me.fapcs.shared.util.setInterval
 import me.fapcs.shared.util.unit
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
@@ -29,6 +32,7 @@ internal class CommunicationHandler : ICommunicationHandler {
 
     private val packets = mutableListOf<PacketHolder<*>>(
         PacketHolder(UnknownPacket::class, UnknownPacket.serializer()),
+        PacketHolder(PingPacket::class, PingPacket.serializer()),
 
         PacketHolder(BrightnessChangePacket::class, BrightnessChangePacket.serializer()),
         PacketHolder(BrightnessRequestPacket::class, BrightnessRequestPacket.serializer()),
@@ -91,6 +95,16 @@ internal class CommunicationHandler : ICommunicationHandler {
 
             Logger.debug("Invoking listeners...")
             listeners.forEach { it(packetInstance) }
+        }
+
+        Logger.debug("Initializing keep-alive...")
+        setInterval(5000) {
+            Logger.debug("Sending keep-alive...")
+
+            if (CommunicationProvider.isInitialized) CommunicationHandler.send(PingPacket)
+            else this.clear()
+
+            Logger.debug("Keep-alive sent!")
         }
 
         Logger.info("Communication initialized!")
