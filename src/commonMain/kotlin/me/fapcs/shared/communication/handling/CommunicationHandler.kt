@@ -3,7 +3,6 @@ package me.fapcs.shared.communication.handling
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import me.fapcs.shared.communication.IPacket
-import me.fapcs.shared.communication.RawPacket
 import me.fapcs.shared.communication.UnknownPacket
 import me.fapcs.shared.expect.CommunicationProvider
 import me.fapcs.shared.log.Logger
@@ -46,12 +45,11 @@ internal class CommunicationHandler : ICommunicationHandler {
             Logger.debug("Data: $data")
 
             Logger.debug("Getting packet instance...")
-            val packetHolder = if (packet == "raw") null else packets.firstOrNull { it.packet.simpleName == packet }
+            val packetHolder = packets.firstOrNull { it.packet.simpleName == packet }
             Logger.debug("Packet instance: ${packetHolder?.packet?.simpleName ?: "unknown"}")
 
             val packetInstance =
-                if (packet == "raw") RawPacket(JsonDocument(data))
-                else if (packetHolder == null) UnknownPacket(JsonDocument(data))
+                if (packetHolder == null) UnknownPacket(JsonDocument(data))
                 else Json.decodeFromString(packetHolder.serializer, data)
 
             Logger.debug("Invoking listeners...")
@@ -88,23 +86,6 @@ internal class CommunicationHandler : ICommunicationHandler {
         val document = JsonDocument()
             .set("packet", packet::class.simpleName ?: "unknown")
             .set("data", packetHolder.encode(packet))
-        Logger.debug("Document: $document")
-
-        Logger.debug("Sending packet...")
-        CommunicationProvider.send(document.toString())
-    }
-
-    override fun sendRaw(data: JsonDocument) {
-        Logger.debug("Sending raw packet: $data")
-        if (!CommunicationProvider.isInitialized)  {
-            Logger.fatal("CommunicationProvider is not initialized!")
-            throw IllegalStateException("CommunicationProvider is not initialized!")
-        }
-
-        Logger.debug("Creating document...")
-        val document = JsonDocument()
-            .set("packet", "raw")
-            .set("data", data.toString())
         Logger.debug("Document: $document")
 
         Logger.debug("Sending packet...")
