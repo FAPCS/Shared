@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.fapcs"
-version = "1.3"
+version = "0.0.0"
 
 repositories {
     mavenCentral()

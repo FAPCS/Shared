@@ -4,4 +4,4 @@ import kotlinx.serialization.Serializable
 import me.fapcs.shared.communication.IPacket
 
 @Serializable
-object PingPacket : IPacket
+object KeepAlivePacket : IPacket

@@ -53,25 +53,37 @@ internal class ConfigurationHandler : IConfigurationHandler {
         update: Boolean = false,
         use: (JsonDocument, String) -> Unit
     ) {
-        var document = ConfigProvider.get()
+        val root = ConfigProvider.get()
+        val documentTree = mutableListOf<Pair<String, JsonDocument>>(
+            "" to root
+        )
+
         val split = key.split(".")
-
-        if (split.size == 1) {
-            use(document, key)
-            if (update) ConfigProvider.set(document)
-            return
-        }
-
         for (i in 0 until split.size - 1) {
             val currentKey = split[i]
-            document = if (currentKey !in document) {
-                if (create) document.set(currentKey, JsonDocument())
+            val currentDocument = documentTree.last().second
+
+            val nextDocument = if (currentKey !in currentDocument) {
+                if (create) JsonDocument()
                 else return
-            } else document.getJsonDocument(currentKey)!!
+            } else currentDocument.getJsonDocument(currentKey)!!
+
+            documentTree.add(currentKey to nextDocument)
         }
 
-        use(document, split.last())
-        if (update) ConfigProvider.set(document)
+        val lastKey = split.last()
+        val lastDocument = documentTree.last().second
+        use(lastDocument, lastKey)
+
+        if (update) {
+            for (i in documentTree.size - 1 downTo 1) {
+                val (currentKey, document) = documentTree[i]
+                val parent = documentTree[i - 1].second
+                parent.set(currentKey, document)
+            }
+
+            ConfigProvider.set(root)
+        }
     }
 
 }
