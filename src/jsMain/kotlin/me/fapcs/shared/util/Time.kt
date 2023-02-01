@@ -2,10 +2,10 @@
 
 package me.fapcs.shared.util
 
-external fun setJsTimeout(function: () -> Unit, delay: Long): Int
-external fun clearJsTimeout(handle: Int)
-external fun setJsInterval(function: () -> Unit, delay: Long): Int
-external fun clearJsInterval(id: Int)
+import me.fapcs.shared.util.js.clearInterval as clearJsInterval
+import me.fapcs.shared.util.js.clearTimeout as clearJsTimeout
+import me.fapcs.shared.util.js.setInterval as setJsInterval
+import me.fapcs.shared.util.js.setTimeout as setJsTimeout
 
 actual fun clearTimeout(id: Int) = clearJsTimeout(id)
 
@@ -30,8 +30,8 @@ internal class TimeImpl(private val timeout: Boolean) : Time {
         get() = _id ?: throw IllegalStateException("Time is not set")
 
     override fun clear() {
-        if (timeout) clearJsTimeout(id)
-        else clearJsInterval(id)
+        if (timeout) clearTimeout(id)
+        else clearInterval(id)
     }
 
     fun setId(id: Int) {
