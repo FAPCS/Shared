@@ -1,40 +1,40 @@
 package me.fapcs.shared.expect
 
+import me.fapcs.shared.config.ConfigurationHandler
 import me.fapcs.shared.log.LogLevel
 import kotlin.js.Date
 
 actual object LogProvider {
 
-    actual fun log(level: LogLevel, message: String) = when (level) {
-        LogLevel.DEBUG -> console.log(formatMessage(level, message))
-        LogLevel.INFO -> console.info(formatMessage(level, message))
-        LogLevel.WARN -> console.warn(formatMessage(level, message))
-        LogLevel.ERROR -> console.error(formatMessage(level, message))
-        LogLevel.FATAL -> console.error("%c${formatMessage(level, message)}", "background: red; color: white;")
-    }
+    private val logLevel = ConfigurationHandler.get("logLevel", LogLevel.DEBUG, true)
 
-    actual fun log(level: LogLevel, message: String, throwable: Throwable) = when (level) {
-        LogLevel.DEBUG -> console.log(formatMessage(level, message), throwable)
-        LogLevel.INFO -> console.info(formatMessage(level, message), throwable)
-        LogLevel.WARN -> console.warn(formatMessage(level, message), throwable)
-        LogLevel.ERROR -> console.error(formatMessage(level, message), throwable)
-        LogLevel.FATAL -> console.error("%c${formatMessage(level, message)}", "background: red; color: white;", throwable)
-    }
+    actual fun log(level: LogLevel, message: String) = finalLog(level, *formatMessage(level, message))
 
-    actual fun log(level: LogLevel, throwable: Throwable) = when (level) {
-        LogLevel.DEBUG -> console.log(throwable)
-        LogLevel.INFO -> console.info(throwable)
-        LogLevel.WARN -> console.warn(throwable)
-        LogLevel.ERROR -> console.error(throwable)
-        LogLevel.FATAL -> console.error("%c", "background: red; color: white;", throwable)
-    }
+    actual fun log(level: LogLevel, message: String, throwable: Throwable) =
+        finalLog(level, *arrayOf(formatMessage(level, message), arrayOf(throwable)).flatten().toTypedArray())
 
-    private fun formatMessage(level: LogLevel, message: String) =
-        "${getTime()} | ${level.name.padEnd(5, ' ')} | $message"
+    actual fun log(level: LogLevel, throwable: Throwable) = finalLog(level, throwable)
+
+    private fun formatMessage(level: LogLevel, message: String): Array<String> {
+        if (level != LogLevel.FATAL) return arrayOf("${getTime()} | ${level.name.padEnd(5, ' ')} | $message")
+        return arrayOf("%c${getTime()} | ${level.name.padEnd(5, ' ')} | $message", "background: red; color: white;")
+    }
 
     private fun getTime(): String {
         val date = Date()
         return "${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}"
+    }
+
+    private fun finalLog(level: LogLevel, vararg messages: Any) {
+        if (level < logLevel) return
+
+        when (level) {
+            LogLevel.DEBUG -> console.log(*messages)
+            LogLevel.INFO -> console.info(*messages)
+            LogLevel.WARN -> console.warn(*messages)
+            LogLevel.ERROR -> console.error(*messages)
+            LogLevel.FATAL -> console.error(*messages)
+        }
     }
 
 }
