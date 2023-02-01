@@ -12,7 +12,7 @@ import me.fapcs.shared.module.brightness.packet.BrightnessRequestPacket
 import me.fapcs.shared.module.camouflage.packet.SetDarkenInsidePacket
 import me.fapcs.shared.module.camouflage.packet.SetDarkenOutsidePacket
 import me.fapcs.shared.module.camouflage.packet.SetIRLightPacket
-import me.fapcs.shared.module.general.packet.PingPacket
+import me.fapcs.shared.module.general.packet.KeepAlivePacket
 import me.fapcs.shared.module.light.packet.SendLightConfigurationPacket
 import me.fapcs.shared.module.matrix.big.packet.DisableBigMatrixPacket
 import me.fapcs.shared.module.matrix.big.packet.UpdateBigMatrixPacket
@@ -32,7 +32,7 @@ internal class CommunicationHandler : ICommunicationHandler {
 
     private val packets = mutableListOf<PacketHolder<*>>(
         PacketHolder(UnknownPacket::class, UnknownPacket.serializer()),
-        PacketHolder(PingPacket::class, PingPacket.serializer()),
+        PacketHolder(KeepAlivePacket::class, KeepAlivePacket.serializer()),
 
         PacketHolder(BrightnessChangePacket::class, BrightnessChangePacket.serializer()),
         PacketHolder(BrightnessRequestPacket::class, BrightnessRequestPacket.serializer()),
@@ -98,10 +98,10 @@ internal class CommunicationHandler : ICommunicationHandler {
         }
 
         Logger.debug("Initializing keep-alive...")
-        setInterval(5000) {
+        setInterval(10000) {
             Logger.debug("Sending keep-alive...")
 
-            if (CommunicationProvider.isInitialized) CommunicationHandler.send(PingPacket)
+            if (CommunicationProvider.isInitialized) CommunicationHandler.send(KeepAlivePacket)
             else this.clear()
 
             Logger.debug("Keep-alive sent!")
