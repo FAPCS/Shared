@@ -6,7 +6,15 @@ import kotlin.js.Date
 
 actual object LogProvider {
 
-    private val logLevel = ConfigurationHandler.get("logLevel", LogLevel.DEBUG, true)
+    private var ignoreLogLevel = false
+
+    private val logLevel by lazy {
+        ignoreLogLevel = true
+        val level = ConfigurationHandler.get("log.level", LogLevel.INFO)
+        ignoreLogLevel = false
+
+        level
+    }
 
     actual fun log(level: LogLevel, message: String) = finalLog(level, *formatMessage(level, message))
 
@@ -26,7 +34,7 @@ actual object LogProvider {
     }
 
     private fun finalLog(level: LogLevel, vararg messages: Any) {
-        if (level < logLevel) return
+        if (level < if (ignoreLogLevel) LogLevel.INFO else logLevel) return
 
         when (level) {
             LogLevel.DEBUG -> console.log(*messages)
