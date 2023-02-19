@@ -1,14 +1,14 @@
 @file:Suppress("UNUSED_VARIABLE")
 
 plugins {
-    kotlin("multiplatform") version "1.8.0"
-    kotlin("plugin.serialization") version "1.8.0"
+    kotlin("multiplatform") version "1.8.10"
+    kotlin("plugin.serialization") version "1.8.10"
 
     id("maven-publish")
 }
 
 group = "me.fapcs"
-version = "0.0.0"
+version = "0.1.0"
 
 repositories {
     mavenCentral()

@@ -20,7 +20,6 @@ import me.fapcs.shared.module.matrix.small.packet.DisableSmallMatrixSidePacket
 import me.fapcs.shared.module.matrix.small.packet.UpdateSmallMatrixPacket
 import me.fapcs.shared.module.siren.packet.SetMicrophoneStatePacket
 import me.fapcs.shared.module.siren.packet.SetSirenPacket
-import me.fapcs.shared.module.stripe.packet.SetLedPacket
 import me.fapcs.shared.module.stripe.packet.SetLedsPacket
 import me.fapcs.shared.util.json.JsonDocument
 import me.fapcs.shared.util.setInterval
@@ -37,7 +36,6 @@ internal class CommunicationHandler : ICommunicationHandler {
         PacketHolder(BrightnessChangePacket::class, BrightnessChangePacket.serializer()),
         PacketHolder(BrightnessRequestPacket::class, BrightnessRequestPacket.serializer()),
 
-        PacketHolder(SetLedPacket::class, SetLedPacket.serializer()),
         PacketHolder(SetLedsPacket::class, SetLedsPacket.serializer()),
 
         PacketHolder(SendLightConfigurationPacket::class, SendLightConfigurationPacket.serializer()),
