@@ -5,6 +5,7 @@ import me.fapcs.shared.communication.IPacket
 import me.fapcs.shared.module.general.model.Color
 import me.fapcs.shared.module.stripe.model.LedId
 import me.fapcs.shared.module.stripe.model.LedStripe
+import kotlin.jvm.JvmName
 
 @Serializable
 @Suppress("unused")
@@ -34,6 +35,7 @@ data class SetLedsPacket internal constructor(val stripe: Int, val color: Color,
 
         fun create(stripe: Int, color: Color, leds: IntArray) = SetLedsPacket(stripe, color, leds)
 
+        @JvmName("createVararg")
         fun create(stripe: Int, color: Color, vararg leds: Int) = SetLedsPacket(stripe, color, leds)
 
         fun create(stripe: Int, color: Color, leds: IntRange) = SetLedsPacket(stripe, color, leds.toList().toIntArray())
@@ -42,6 +44,7 @@ data class SetLedsPacket internal constructor(val stripe: Int, val color: Color,
 
         fun create(stripe: LedStripe, color: Color, leds: IntArray) = SetLedsPacket(stripe.id, color, leds)
 
+        @JvmName("createVararg")
         fun create(stripe: LedStripe, color: Color, vararg leds: Int) = SetLedsPacket(stripe.id, color, leds)
 
         fun create(stripe: LedStripe, color: Color, leds: IntRange) =
