@@ -15,7 +15,19 @@ class StaticMode(val color: Color, val text: String) : MatrixMode
 
 @Serializable
 @SerialName("running_text")
-class RunningTextMode(val color: Color, val text: String) : MatrixMode
+class RunningTextMode(
+    val color: Color,
+    val directionMode: Direction,
+    val clear: Boolean,
+    val text: String
+) : MatrixMode {
+
+    enum class Direction {
+        LEFT_TO_RIGHT,
+        RIGHT_TO_LEFT
+    }
+
+}
 
 @Serializable
 @SerialName("switching_text")
