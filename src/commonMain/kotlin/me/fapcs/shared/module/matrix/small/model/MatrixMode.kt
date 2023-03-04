@@ -15,7 +15,7 @@ class StaticMode(val color: Color, val text: String) : MatrixMode
 
 @Serializable
 @SerialName("running_text")
-class RunningTextMode(
+class ScrollingMode(
     val color: Color,
     val direction: Direction,
     val loop: Boolean,
@@ -31,7 +31,7 @@ class RunningTextMode(
 
 @Serializable
 @SerialName("switching_text")
-class SwitchingTextMode(val color: Color, val texts: List<String>) : MatrixMode
+class SwitchingMode(val color: Color, val texts: List<String>) : MatrixMode
 
 @Serializable
 @SerialName("split_mode")
