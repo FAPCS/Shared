@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 import me.fapcs.shared.module.general.model.Color
 
 @Serializable
-sealed interface MatrixMode
+sealed interface SmallMatrixMode
 
 @Serializable
 @SerialName("static")
-class StaticMode(val color: Color, val text: String) : MatrixMode
+class StaticMode(val color: Color, val text: String) : SmallMatrixMode
 
 @Serializable
 @SerialName("running_text")
@@ -20,7 +20,7 @@ class ScrollingMode(
     val direction: Direction,
     val loop: Boolean,
     val text: String
-) : MatrixMode {
+) : SmallMatrixMode {
 
     enum class Direction {
         LEFT_TO_RIGHT,
@@ -31,8 +31,8 @@ class ScrollingMode(
 
 @Serializable
 @SerialName("switching_text")
-class SwitchingMode(val color: Color, val texts: List<String>) : MatrixMode
+class SwitchingMode(val color: Color, val texts: List<String>) : SmallMatrixMode
 
 @Serializable
 @SerialName("split_mode")
-class SplitMode(val left: MatrixMode, val right: MatrixMode) : MatrixMode
+class SplitMode(val left: SmallMatrixMode, val right: SmallMatrixMode) : SmallMatrixMode
