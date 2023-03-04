@@ -17,8 +17,8 @@ class StaticMode(val color: Color, val text: String) : MatrixMode
 @SerialName("running_text")
 class RunningTextMode(
     val color: Color,
-    val directionMode: Direction,
-    val clear: Boolean,
+    val direction: Direction,
+    val loop: Boolean,
     val text: String
 ) : MatrixMode {
 
