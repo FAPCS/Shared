@@ -1,4 +1,4 @@
-package me.fapcs.shared.module.light.model
+package me.fapcs.shared.module.light.model.lamp
 
 @Suppress("unused")
 enum class Lamp {

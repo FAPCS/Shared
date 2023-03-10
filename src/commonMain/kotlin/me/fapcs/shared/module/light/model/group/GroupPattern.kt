@@ -1,4 +1,4 @@
-package me.fapcs.shared.module.light.model.pattern
+package me.fapcs.shared.module.light.model.group
 
 @Suppress("unused")
 enum class GroupPattern {

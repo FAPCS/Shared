@@ -27,6 +27,7 @@ data class Color(val red: Int, val green: Int, val blue: Int) {
     @Suppress("unused")
     companion object {
 
+        val BLACK = Color(0, 0, 0)
         val BLUE = Color(16, 112, 194)
         val ORANGE = Color(255, 120, 23)
         val RED = Color(238, 28, 3)

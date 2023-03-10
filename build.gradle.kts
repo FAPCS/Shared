@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.fapcs"
-version = "0.1.0"
+version = "0.3.0"
 
 repositories {
     mavenCentral()
@@ -37,7 +37,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
             }
         }
         val commonTest by getting {
@@ -48,8 +48,8 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation("org.apache.logging.log4j:log4j-api:2.19.0")
-                implementation("org.apache.logging.log4j:log4j-core:2.19.0")
+                implementation("org.apache.logging.log4j:log4j-api:2.20.0")
+                implementation("org.apache.logging.log4j:log4j-core:2.20.0")
             }
         }
         val jvmTest by getting
