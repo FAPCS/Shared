@@ -1,9 +1,10 @@
 package me.fapcs.shared.module.siren.packet
 
 import kotlinx.serialization.Serializable
+import me.fapcs.shared.communication.IPacket
 
 @Serializable
-data class SetVolumePacket(val volumeType: VolumeType, val volume: Int) {
+data class SetVolumePacket(val volumeType: VolumeType, val volume: Int) : IPacket {
 
     constructor(volumeType: VolumeType, volume: Volume) : this(volumeType, volume.value)
 

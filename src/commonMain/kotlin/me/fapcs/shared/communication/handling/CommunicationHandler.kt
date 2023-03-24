@@ -20,6 +20,7 @@ import me.fapcs.shared.module.matrix.small.packet.DisableSmallMatrixSidePacket
 import me.fapcs.shared.module.matrix.small.packet.UpdateSmallMatrixPacket
 import me.fapcs.shared.module.siren.packet.SetMicrophoneStatePacket
 import me.fapcs.shared.module.siren.packet.SetSirenPacket
+import me.fapcs.shared.module.siren.packet.SetVolumePacket
 import me.fapcs.shared.module.stripe.packet.SetLedsPacket
 import me.fapcs.shared.util.json.JsonDocument
 import me.fapcs.shared.util.setInterval
@@ -46,6 +47,7 @@ internal class CommunicationHandler : ICommunicationHandler {
 
         PacketHolder(SetMicrophoneStatePacket::class, SetMicrophoneStatePacket.serializer()),
         PacketHolder(SetSirenPacket::class, SetSirenPacket.serializer()),
+        PacketHolder(SetVolumePacket::class, SetVolumePacket.serializer()),
 
         PacketHolder(DisableSmallMatrixSidePacket::class, DisableSmallMatrixSidePacket.serializer()),
         PacketHolder(UpdateSmallMatrixPacket::class, UpdateSmallMatrixPacket.serializer()),
