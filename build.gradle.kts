@@ -1,7 +1,7 @@
 @file:Suppress("UNUSED_VARIABLE")
 
 plugins {
-    kotlin("multiplatform") version "1.8.10"
+    kotlin("multiplatform") version "1.8.20"
     kotlin("plugin.serialization") version "1.8.10"
 
     id("maven-publish")
